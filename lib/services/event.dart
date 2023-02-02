@@ -16,15 +16,15 @@ class EventService{
     return all_events;
   }
 
-  Future<void> addEvent(String title, String dateCreated, String deadline, String alert, bool status) async{
-    var key = _events.add(Event(title: title, dateCreated: dateCreated, deadline: deadline, alert: alert, status: status));
+  Future<void> addEvent(Event event) async{
+    var key = _events.add(event);
   }
 
   Future<void> deleteEvent(int key) async{
     _events.delete(key);
   }
 
-  Future<void> updateEvent(int key,String title, String dateCreated, String deadline, String alert, bool status) async{
-    _events.put(key,Event(title: title, dateCreated: dateCreated, deadline: deadline, alert: alert, status: status));
+  Future<void> updateEvent(int key,Event event) async{
+    _events.put(key,event);
   }
 }

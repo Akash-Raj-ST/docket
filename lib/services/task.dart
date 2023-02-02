@@ -16,15 +16,15 @@ class TaskService{
     return all_tasks;
   }
 
-  Future<void> addTask(String title, String dateCreated, bool status) async{
-    var key = _tasks.add(Task(title: title, dateCreated: dateCreated, status: status));
+  Future<void> addTask(Task task) async{
+    var key = _tasks.add(task);
   }
 
   Future<void> deleteTask(int key) async{
     _tasks.delete(key);
   }
 
-  Future<void> updateTask(int key,String title, String dateCreated, bool status) async{
-    _tasks.put(key,Task(title: title, dateCreated: dateCreated, status: status));
+  Future<void> updateTask(int key,Task task) async{
+    _tasks.put(key,task);
   }
 }
