@@ -1,8 +1,15 @@
-import 'package:docket/tasks/TaskPage.dart';
 import 'package:flutter/material.dart';
-import './events/EventPage.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
-void main(){
+import 'package:docket/tasks/TaskPage.dart';
+import './events/EventPage.dart';
+import 'package:docket/services/event.dart';
+import 'package:docket/services/task.dart';
+
+void main() async{
+  await Hive.initFlutter();
   runApp(MyApp());
 }
 
@@ -12,13 +19,21 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        body: Column(
-          children: [
-            EventPage(),
-            TaskPage(),
-          ],
+    return MultiRepositoryProvider(
+
+      providers: [
+        RepositoryProvider(create: (context)=>EventService()),
+        RepositoryProvider(create: (context)=>TaskService()),
+      ],
+
+      child: MaterialApp(
+        home: Scaffold(
+          body: Column(
+            children: [
+              EventPage(),
+              TaskPage(),
+            ],
+          ),
         ),
       ),
     );

@@ -1,6 +1,9 @@
+import 'package:docket/events/bloc/event_bloc.dart';
+import 'package:docket/services/event.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:docket/utils/heading.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class EventPage extends StatefulWidget {
   const EventPage({super.key});
@@ -22,32 +25,44 @@ class _EventState extends State<EventPage> {
   @override
   Widget build(BuildContext context) {
 
-    return Container(
-      height: 350,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          heading('Event'),
-          
-          Expanded(
-            child:Scrollbar(
-              scrollbarOrientation: ScrollbarOrientation.bottom,
-              thumbVisibility: true,
-              
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: all_events.map((event){
-                     return EventItem(event:event);
-                  }).toList(),
-                ),
-              ) ,
-            )
-            
-          ),
-        ],
+    return BlocProvider(
+
+      create: (context) => EventBloc(
+        RepositoryProvider.of<EventService>(context)
       ),
+      
+      child: BlocBuilder<EventBloc,EventState>(
+
+        builder: (context,state){
+          return Container(
+            height: 350,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                heading('Event'),
+                
+                Expanded(
+                  child:Scrollbar(
+                    scrollbarOrientation: ScrollbarOrientation.bottom,
+                    thumbVisibility: true,
+                    
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ListView(
+                        scrollDirection: Axis.horizontal,
+                        children: all_events.map((event){
+                          return EventItem(event:event);
+                        }).toList(),
+                      ),
+                    ) ,
+                  )
+                  
+                ),
+              ],
+            ),
+          );
+        },
+      )
     );
   }
 }
