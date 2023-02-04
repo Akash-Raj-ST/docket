@@ -8,6 +8,11 @@ class EventService{
   Future<void> init() async{
     Hive.registerAdapter(EventAdapter());
     _events = await Hive.openBox<Event>('EventBox');
+
+    _events.add(Event(title: "Check1", dateCreated: "Today", deadlineDate: "2023-01-02", deadlineTime: "2023-01-02", alert: "alert_time", status: false));
+    _events.add(Event(title: "Check2", dateCreated: "Today", deadlineDate: "2023-01-02", deadlineTime: "2023-01-02", alert: "alert_time", status: false));
+
+    _events.clear();
   }
 
   Future<List<Event>> getEvents() async{

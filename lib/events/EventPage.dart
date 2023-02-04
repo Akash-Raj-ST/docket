@@ -13,14 +13,6 @@ class EventPage extends StatefulWidget {
 }
 
 class _EventState extends State<EventPage> {
-  List all_events = [
-      {"date":"2023-03-23","time":"11:05","title":"Workshop on Deep Learning"},
-      {"date":"2023-02-07","time":"13:05","title":"Workshop on Flutter UI"},
-      {"date":"2023-01-15","time":"16:05","title":"Workshop on Security"},
-      {"date":"2022-01-15","time":"16:05","title":"Workshop on Security"},
-
-    ];
-
 
   @override
   Widget build(BuildContext context) {
@@ -29,38 +21,46 @@ class _EventState extends State<EventPage> {
 
       create: (context) => EventBloc(
         RepositoryProvider.of<EventService>(context)
-      ),
+      )..add(LoadEventEvent()),
       
       child: BlocBuilder<EventBloc,EventState>(
 
         builder: (context,state){
-          return Container(
-            height: 350,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                heading('Event'),
-                
-                Expanded(
-                  child:Scrollbar(
-                    scrollbarOrientation: ScrollbarOrientation.bottom,
-                    thumbVisibility: true,
-                    
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: ListView(
-                        scrollDirection: Axis.horizontal,
-                        children: all_events.map((event){
-                          return EventItem(event:event);
-                        }).toList(),
-                      ),
-                    ) ,
-                  )
+
+          if(state is EventLoadedState){
+            return Container(
+              height: 350,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  heading('Event'),
                   
-                ),
-              ],
-            ),
-          );
+                  Expanded(
+                    child:Scrollbar(
+                      scrollbarOrientation: ScrollbarOrientation.bottom,
+                      thumbVisibility: true,
+                      
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ListView(
+                          scrollDirection: Axis.horizontal,
+                          children: state.Events.map((event){
+                            return EventItem(event:event);
+                          }).toList(),
+                        ),
+                      ) ,
+                    )
+                    
+                  ),
+                ],
+              ),
+            );
+          }
+          else{
+            return Center(
+              child:Text("Loading...")
+            );
+          }
         },
       )
     );
@@ -77,7 +77,7 @@ class EventItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    var days_left = DateTime.parse(event['date']).difference(DateTime.now()).inDays;
+    var days_left = DateTime.parse(event['deadlineDate']).difference(DateTime.now()).inDays;
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -96,7 +96,7 @@ class EventItem extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(event['date'],
+                  Text(event['deadlineDate'],
                     style: TextStyle(
                       color: Colors.white,
                     ),
@@ -132,7 +132,7 @@ class EventItem extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(event["time"],
+                  Text(event["deadlineTime"],
                     style: TextStyle(
                       color: Colors.white,
                     ),

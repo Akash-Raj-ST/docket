@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:hive/hive.dart';
 
 part 'event.g.dart';
@@ -11,18 +12,22 @@ class Event {
   final String dateCreated;
 
   @HiveField(2)
-  final String deadline;
+  final String deadlineDate;
 
   @HiveField(3)
-  final String alert;
+  final String deadlineTime;
 
   @HiveField(4)
+  final String alert;
+
+  @HiveField(5)
   final bool status;
 
   Event({
     required this.title,
     required this.dateCreated,
-    required this.deadline,
+    required this.deadlineDate,
+    required this.deadlineTime,
     required this.alert,
     required this.status,
   });

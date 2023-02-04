@@ -19,25 +19,28 @@ class EventAdapter extends TypeAdapter<Event> {
     return Event(
       title: fields[0] as String,
       dateCreated: fields[1] as String,
-      deadline: fields[2] as String,
-      alert: fields[3] as String,
-      status: fields[4] as bool,
+      deadlineDate: fields[2] as String,
+      deadlineTime: fields[3] as String,
+      alert: fields[4] as String,
+      status: fields[5] as bool,
     );
   }
 
   @override
   void write(BinaryWriter writer, Event obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(6)
       ..writeByte(0)
       ..write(obj.title)
       ..writeByte(1)
       ..write(obj.dateCreated)
       ..writeByte(2)
-      ..write(obj.deadline)
+      ..write(obj.deadlineDate)
       ..writeByte(3)
-      ..write(obj.alert)
+      ..write(obj.deadlineTime)
       ..writeByte(4)
+      ..write(obj.alert)
+      ..writeByte(5)
       ..write(obj.status);
   }
 
