@@ -1,58 +1,36 @@
-import 'dart:ffi';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'bloc/task_bloc.dart';
 
-class TodayTask extends StatefulWidget {
-  List all_tasks;
-  var handler;
-  TodayTask({required this.all_tasks,required this.handler,super.key});
-
-  @override
-  State<TodayTask> createState() => _ShowPendingState();
-}
-
-class _ShowPendingState extends State<TodayTask> {
-
-  bool is_checked = false;
-  List pending_tasks = [];
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-
-    widget.all_tasks.forEach((task) {
-      if(task['status']=='today'){
-        pending_tasks.add(task);
-      }
-    }
-    );
-  }
+class TodayTask extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-      return ListView(
-        children: pending_tasks.map((task){
-          return Task(task: task,handler: widget.handler,);
-        }).toList(),
-      );
+    return BlocBuilder<TaskBloc, TaskState>(
+      builder: (context, state) {
+        if(state is TaskLoadedState){
+          return ListView(
+            children: state.Tasks.map((task) {
+              return TaskItem(task: task);
+            }).toList(),
+          );
+        }
+        else{
+          return Center(
+            child:Text("Loading Today Task...")
+          );
+        }
+      },
+    );
   }
-}   
-
-class Task extends StatefulWidget {
-  Map task;
-  var handler;
-
-  Task({required this.task,required this.handler,super.key});
-
-  @override
-  State<Task> createState() => _TaskState();
 }
 
-class _TaskState extends State<Task> {
+class TaskItem extends StatelessWidget {
+  var task;
 
-  bool is_checked = false;
+  TaskItem({required this.task, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -80,28 +58,28 @@ class _TaskState extends State<Task> {
           child: Row(
             children: [
               Checkbox(
-                value: is_checked,
-                fillColor: MaterialStateProperty.resolveWith(getColor),
-                onChanged: (bool? value){
-                  setState(() {
-                    is_checked = value!;
+                  value: false,
+                  fillColor: MaterialStateProperty.resolveWith(getColor),
+                  onChanged: (bool? value) {
+                    // setState(() {
+                    //   is_checked = value!;
 
-                    if(is_checked){
-                      widget.handler(widget.task['id'],'completed');
-                    }
-                  });
-                }
-              ),
+                    //   if (is_checked) {
+                    //     //update status of list
+                    //   }
+                    // });
+                  }),
               Flexible(
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 8,right: 8),
-                  child: Text(widget.task['title'],
-                    style: TextStyle(
-                      decoration: is_checked?TextDecoration.lineThrough:TextDecoration.none,
-                      fontSize: 14,
-                      color: Colors.black,
-                      )
-                    ),
+                  padding: const EdgeInsets.only(left: 8, right: 8),
+                  child: Text(task.title,
+                      style: TextStyle(
+                        decoration: task.status
+                            ? TextDecoration.lineThrough
+                            : TextDecoration.none,
+                        fontSize: 14,
+                        color: Colors.black,
+                      )),
                 ),
               ),
             ],

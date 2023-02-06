@@ -11,9 +11,31 @@ class TaskService{
   }
 
   Future<List<Task>> getTasks() async{
-    final all_tasks = _tasks.values.toList();
-
-    return all_tasks;
+    // final all_tasks = _tasks.values.toList();
+    return [
+    Task(
+      title: "review  2 ppt for ISM",
+      dateCreated: "12/01/2023",
+      status: false
+    ),
+    Task(
+      title: "review  3 ppt for ISM",
+      dateCreated: "12/01/2023",
+      status: true
+    ),
+    Task(
+      title: "review  4 ppt for ISM",
+      dateCreated: "12/01/2023",
+      status: false
+    ),
+    Task(
+      title: "review  5 ppt for ISM",
+      dateCreated: "12/01/2023",
+      status: false
+    ),
+  
+  ];
+    //return all_tasks;
   }
 
   Future<void> addTask(Task task) async{

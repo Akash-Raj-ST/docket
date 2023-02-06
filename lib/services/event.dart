@@ -9,16 +9,17 @@ class EventService{
     Hive.registerAdapter(EventAdapter());
     _events = await Hive.openBox<Event>('EventBox');
 
+    _events.clear();
+
     _events.add(Event(title: "Check1", dateCreated: "Today", deadlineDate: "2023-01-02", deadlineTime: "2023-01-02", alert: "alert_time", status: false));
     _events.add(Event(title: "Check2", dateCreated: "Today", deadlineDate: "2023-01-02", deadlineTime: "2023-01-02", alert: "alert_time", status: false));
-
-    _events.clear();
+    print("Loaded event init");
   }
 
   Future<List<Event>> getEvents() async{
-    final all_events = _events.values.toList();
-
-    return all_events;
+    // final all_events = _events.values.toList();
+    
+    return [Event(title: "Check1", dateCreated: "Today", deadlineDate: "2023-01-02", deadlineTime: "2023-01-02", alert: "alert_time", status: false)];
   }
 
   Future<void> addEvent(Event event) async{

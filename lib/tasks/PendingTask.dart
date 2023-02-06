@@ -1,56 +1,35 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'bloc/task_bloc.dart';
 
-class PendingTask extends StatefulWidget {
-  List all_tasks;
-  var handler;
-  PendingTask({required this.all_tasks,required this.handler,super.key});
-
-  @override
-  State<PendingTask> createState() => _ShowPendingState();
-}
-
-class _ShowPendingState extends State<PendingTask> {
-
-  bool is_checked = false;
-  List pending_tasks = [];
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-
-    widget.all_tasks.forEach((task) {
-      if(task['status']=='pending'){
-        pending_tasks.add(task);
-      }
-    }
-    );
-  }
+class PendingTask extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-      return ListView(
-        children: pending_tasks.map((task){
-          return Task(task: task,handler: widget.handler,);
-        }).toList(),
-      );
+    return BlocBuilder<TaskBloc, TaskState>(
+      builder: (context, state) {
+        if(state is TaskLoadedState){
+          return ListView(
+            children: state.Tasks.map((task) {
+              return TaskItem(task: task);
+            }).toList(),
+          );
+        }else{
+          return Center(
+            child:Text("Loading Today Task...")
+          );
+        }
+      },
+    );
   }
-}   
-
-class Task extends StatefulWidget {
-  Map task;
-  var handler;
-
-  Task({required this.task,required this.handler,super.key});
-
-  @override
-  State<Task> createState() => _TaskState();
 }
 
-class _TaskState extends State<Task> {
+class TaskItem extends StatelessWidget {
+  var task;
 
-  bool is_checked = false;
+  TaskItem({required this.task, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -67,45 +46,45 @@ class _TaskState extends State<Task> {
     }
 
     return Padding(
-      padding: const EdgeInsets.all(14.0),
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(8)),
-          color: Colors.white,
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Row(
-            children: [
-              Checkbox(
-                value: is_checked,
-                fillColor: MaterialStateProperty.resolveWith(getColor),
-                onChanged: (bool? value){
-                  setState(() {
-                    is_checked = value!;
+          padding: const EdgeInsets.all(14.0),
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(8)),
+              color: Colors.white,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Row(
+                children: [
+                  Checkbox(
+                      value: task.status,
+                      fillColor: MaterialStateProperty.resolveWith(getColor),
+                      onChanged: (bool? value) {
+                        // setState(() {
+                        //   is_checked = value!;
 
-                    if(is_checked){
-                      widget.handler(widget.task['id'],'completed');
-                    }
-                  });
-                }
-              ),
-              Flexible(
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 8,right: 8),
-                  child: Text(widget.task['title'],
-                    style: TextStyle(
-                      decoration: is_checked?TextDecoration.lineThrough:TextDecoration.none,
-                      fontSize: 14,
-                      color: Colors.black,
-                      )
+                        //   if (is_checked) {
+                        //     //update status
+                        //   }
+                        // });
+                      }),
+                  Flexible(
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 8, right: 8),
+                      child: Text(task.title,
+                          style: TextStyle(
+                            decoration: task.status
+                                ? TextDecoration.lineThrough
+                                : TextDecoration.none,
+                            fontSize: 14,
+                            color: Colors.black,
+                          )),
                     ),
-                ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
-      ),
-    );
+        );
   }
 }

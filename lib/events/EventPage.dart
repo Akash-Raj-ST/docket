@@ -77,7 +77,7 @@ class EventItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    var days_left = DateTime.parse(event['deadlineDate']).difference(DateTime.now()).inDays;
+    var days_left = DateTime.parse(event.deadlineDate).difference(DateTime.now()).inDays;
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -96,7 +96,7 @@ class EventItem extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(event['deadlineDate'],
+                  Text(event.deadlineDate,
                     style: TextStyle(
                       color: Colors.white,
                     ),
@@ -117,7 +117,7 @@ class EventItem extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(left: 8,top: 2,right: 8,bottom: 2),
                 child: Center(
-                  child: Text(event['title'],
+                  child: Text(event.title,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 20,
@@ -132,7 +132,7 @@ class EventItem extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(event["deadlineTime"],
+                  Text(event.deadlineTime,
                     style: TextStyle(
                       color: Colors.white,
                     ),
