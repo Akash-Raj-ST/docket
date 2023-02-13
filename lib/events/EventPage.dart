@@ -21,7 +21,7 @@ class _EventState extends State<EventPage> {
 
       create: (context) => EventBloc(
         RepositoryProvider.of<EventService>(context)
-      )..add(LoadEventEvent()),
+      )..add(EventServiceEvent()),
       
       child: BlocBuilder<EventBloc,EventState>(
 

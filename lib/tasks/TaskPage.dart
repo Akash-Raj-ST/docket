@@ -32,7 +32,7 @@ class _TaskState extends State<TaskPage> {
 
       create: (context) => TaskBloc(
         RepositoryProvider.of<TaskService>(context)
-      )..add(LoadTaskEvent()),
+      )..add(TaskServiceEvent()),
 
       child: BlocConsumer<TaskBloc, TaskState>(
         listener: (context, state) {

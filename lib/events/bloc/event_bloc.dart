@@ -14,6 +14,13 @@ class EventBloc extends Bloc<EventEvent, EventState> {
   final EventService _eventService;
   
   EventBloc(this._eventService) : super(EventInitial()) {
+
+    on<EventServiceEvent>((event,emit) async{
+      await _eventService.init();
+
+      add(LoadEventEvent());
+    });
+
     on<LoadEventEvent>((event, emit) async{
       final all_events = await _eventService.getEvents();
       emit(EventLoadedState(all_events));

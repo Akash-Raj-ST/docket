@@ -48,3 +48,8 @@ class DeleteEventEvent extends EventEvent {
   @override
   List<Object> get props => [];
 }
+
+class EventServiceEvent extends EventEvent{
+  @override
+  List<Object> get props => [];
+}

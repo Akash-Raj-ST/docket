@@ -7,10 +7,15 @@ import 'package:docket/tasks/TaskPage.dart';
 import './events/EventPage.dart';
 import 'package:docket/services/event.dart';
 import 'package:docket/services/task.dart';
+import 'package:docket/Add/add.dart';
 
-void main() async{
+Future<void> main() async{
   await Hive.initFlutter();
-  runApp(MyApp());
+  runApp(
+    MaterialApp(
+      home: MyApp(),
+    )
+  );
 }
 
 
@@ -26,16 +31,24 @@ class MyApp extends StatelessWidget {
         RepositoryProvider(create: (context)=>TaskService()),
       ],
 
-      child: MaterialApp(
-        home: Scaffold(
+      child: Scaffold(
           body: Column(
             children: [
               EventPage(),
               TaskPage(),
             ],
           ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () => {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context)=>AddPage()
+                )
+              )
+            },
+            child: Icon(Icons.add),
+          ),
         ),
-      ),
     );
   }
 }

@@ -5,37 +5,38 @@ import 'package:docket/models/task.dart';
 class TaskService{
   late Box<Task> _tasks;
 
+
   Future<void> init() async{
     Hive.registerAdapter(TaskAdapter());
     _tasks = await Hive.openBox<Task>('TaskBox');
   }
 
   Future<List<Task>> getTasks() async{
-    // final all_tasks = _tasks.values.toList();
-    return [
-    Task(
-      title: "review  2 ppt for ISM",
-      dateCreated: "12/01/2023",
-      status: false
-    ),
-    Task(
-      title: "review  3 ppt for ISM",
-      dateCreated: "12/01/2023",
-      status: true
-    ),
-    Task(
-      title: "review  4 ppt for ISM",
-      dateCreated: "12/01/2023",
-      status: false
-    ),
-    Task(
-      title: "review  5 ppt for ISM",
-      dateCreated: "12/01/2023",
-      status: false
-    ),
+    final all_tasks = _tasks.values.toList();
+  //   return [
+  //   Task(
+  //     title: "review  2 ppt for ISM",
+  //     dateCreated: "12/01/2023",
+  //     status: false
+  //   ),
+  //   Task(
+  //     title: "review  3 ppt for ISM",
+  //     dateCreated: "12/01/2023",
+  //     status: true
+  //   ),
+  //   Task(
+  //     title: "review  4 ppt for ISM",
+  //     dateCreated: "12/01/2023",
+  //     status: false
+  //   ),
+  //   Task(
+  //     title: "review  5 ppt for ISM",
+  //     dateCreated: "12/01/2023",
+  //     status: false
+  //   ),
   
-  ];
-    //return all_tasks;
+  // ];
+    return all_tasks;
   }
 
   Future<void> addTask(Task task) async{
