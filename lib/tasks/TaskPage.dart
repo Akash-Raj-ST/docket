@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:docket/utils/button.dart';
 import 'package:docket/utils/heading.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../Add/add.dart';
 import './PendingTask.dart';
 import './TodayTask.dart';
 import 'bloc/task_bloc.dart';
@@ -37,9 +38,14 @@ class _TaskState extends State<TaskPage> {
       child: BlocConsumer<TaskBloc, TaskState>(
         listener: (context, state) {
           // TODO: implement listener
+          if(state is TaskAdded){
+            print("Task Added snackbar");
+          }
         },
 
       builder: (context, state) {
+        
+        if(state is TaskLoadedState){
           return Expanded(
             flex: 3,
             child: Column(
@@ -55,9 +61,32 @@ class _TaskState extends State<TaskPage> {
                         ? TodayTask()
                         : PendingTask()
                 ),
+
+                FloatingActionButton(
+                  onPressed: (){
+                    Navigator.of(context)
+                        .push(MaterialPageRoute(
+                          builder: (_) => BlocProvider.value(
+                            value: BlocProvider.of<TaskBloc>(context),
+                            child: AddPage()
+                            )
+                          )
+                    );
+
+                  },
+                  child: Icon(Icons.add),
+                )
               ],
             ),
           );
+        }
+
+        else{
+
+          return Center(
+            child: Text("Loading.."),
+          );
+        }
         },
       ),
     );

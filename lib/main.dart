@@ -1,3 +1,4 @@
+import 'package:docket/tasks/bloc/task_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive/hive.dart';
@@ -9,46 +10,35 @@ import 'package:docket/services/event.dart';
 import 'package:docket/services/task.dart';
 import 'package:docket/Add/add.dart';
 
-Future<void> main() async{
-  await Hive.initFlutter();
-  runApp(
-    MaterialApp(
-      home: MyApp(),
-    )
-  );
-}
+import 'events/bloc/event_bloc.dart';
 
+Future<void> main() async {
+  await Hive.initFlutter();
+  runApp(MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider(create: (context) => EventService()),
+        RepositoryProvider(create: (context) => TaskService()),
+      ],
+      child: MaterialApp(
+        home: MyApp(),
+      )));
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MultiRepositoryProvider(
-
-      providers: [
-        RepositoryProvider(create: (context)=>EventService()),
-        RepositoryProvider(create: (context)=>TaskService()),
-      ],
-
-      child: Scaffold(
-          body: Column(
-            children: [
-              EventPage(),
-              TaskPage(),
-            ],
-          ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () => {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context)=>AddPage()
-                )
-              )
-            },
-            child: Icon(Icons.add),
-          ),
+    return Scaffold(
+        appBar: AppBar(title: Text("Docket!")),
+        body: Column(
+          children: [
+            EventPage(),
+            TaskPage(),
+          ],
         ),
-    );
+        //floatingActionButton: AddButton(context)
+      );
   }
 }
+

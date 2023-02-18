@@ -15,21 +15,19 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
 
     on<TaskServiceEvent>((event,emit) async{
           await _taskService.init();
-          emit(TaskInitial());
-
           add(LoadTaskEvent());
       }
     );
 
     on<LoadTaskEvent>((event, emit) async{
       final all_tasks = await _taskService.getTasks();
+      emit(TaskInitial());
       emit(TaskLoadedState(all_tasks));
     });
 
     on<AddTaskEvent>((event, emit) {
       _taskService.addTask(event.task);
-      emit(TaskInitial());
-
+      emit(TaskAdded());
       add(LoadTaskEvent());
     });
 
