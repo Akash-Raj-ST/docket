@@ -9,8 +9,7 @@ class EventService {
   Future<void> init() async{
     Hive.registerAdapter(EventAdapter());
     _events = await Hive.openBox<Event>('EventBox');
-
-  }
+  } 
 
   Future<List<Event>> getEvents() async{
     final all_events = _events.values.toList();

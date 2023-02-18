@@ -64,8 +64,11 @@ class MyApp extends StatelessWidget {
                   onPressed: (){
                     Navigator.of(context)
                         .push(MaterialPageRoute(
-                          builder: (_) => BlocProvider.value(
-                            value: BlocProvider.of<TaskBloc>(context),
+                          builder: (_) => MultiBlocProvider(
+                            providers:[
+                              BlocProvider.value(value: BlocProvider.of<TaskBloc>(context)),
+                              BlocProvider.value(value: BlocProvider.of<EventBloc>(context)),
+                            ],
                             child: AddPage()
                             )
                           )

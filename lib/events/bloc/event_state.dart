@@ -11,6 +11,12 @@ abstract class EventState extends Equatable {
 
 class EventInitial extends EventState {}
 
+class EventAdded extends EventState {
+  @override
+  List<Object> get props => [];
+}
+
+
 class EventLoadedState extends EventState {
   final List<Event> Events;
 

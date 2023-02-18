@@ -23,13 +23,13 @@ class EventBloc extends Bloc<EventEvent, EventState> {
 
     on<LoadEventEvent>((event, emit) async{
       final all_events = await _eventService.getEvents();
+      emit(EventInitial());
       emit(EventLoadedState(all_events));
     });
 
     on<AddEventEvent>((event, emit) {
       _eventService.addEvent(event.event);
-      emit(EventInitial());
-
+      emit(EventAdded());
       add(LoadEventEvent());
     });
 

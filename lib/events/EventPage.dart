@@ -17,52 +17,45 @@ class _EventState extends State<EventPage> {
   @override
   Widget build(BuildContext context) {
 
-    return BlocProvider(
+    return BlocBuilder<EventBloc,EventState>(
 
-      create: (context) => EventBloc(
-        RepositoryProvider.of<EventService>(context)
-      )..add(EventServiceEvent()),
-      
-      child: BlocBuilder<EventBloc,EventState>(
+      builder: (context,state){
 
-        builder: (context,state){
-
-          if(state is EventLoadedState){
-            return Container(
-              height: 350,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  heading('Event'),
-                  
-                  Expanded(
-                    child:Scrollbar(
-                      scrollbarOrientation: ScrollbarOrientation.bottom,
-                      thumbVisibility: true,
-                      
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: ListView(
-                          scrollDirection: Axis.horizontal,
-                          children: state.Events.map((event){
-                            return EventItem(event:event);
-                          }).toList(),
-                        ),
-                      ) ,
-                    )
+        if(state is EventLoadedState){
+          return Container(
+            height: 350,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                heading('Event'),
+                
+                Expanded(
+                  child:Scrollbar(
+                    scrollbarOrientation: ScrollbarOrientation.bottom,
+                    thumbVisibility: true,
                     
-                  ),
-                ],
-              ),
-            );
-          }
-          else{
-            return Center(
-              child:Text("Loading...")
-            );
-          }
-        },
-      )
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ListView(
+                        scrollDirection: Axis.horizontal,
+                        children: state.Events.map((event){
+                          return EventItem(event:event);
+                        }).toList(),
+                      ),
+                    ) ,
+                  )
+                  
+                ),
+              ],
+            ),
+          );
+        }
+        else{
+          return Center(
+            child:Text("Loading...")
+          );
+        }
+      },
     );
   }
 }

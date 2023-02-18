@@ -134,85 +134,87 @@ class _EventAddPageState extends State<EventAddPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => EventBloc(RepositoryProvider.of<EventService>(context)),
-      child: BlocConsumer<EventBloc, EventState>(
-        listener: (context, state) {
-          // TODO: implement listener
-        },
-        builder: (context, state) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text("Event"),
-              TextField(
-                controller: _eventContoller,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                ),
+    return BlocConsumer<EventBloc, EventState>(
+      listener: (context, state) {
+        // TODO: implement listener
+        if(state is EventAdded){
+          print("event added successfully");
+        }
+      },
+      builder: (context, state) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text("Event"),
+            TextField(
+              controller: _eventContoller,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
               ),
-              Text("Date"),
-              DateTimePicker(
-                type: DateTimePickerType.date,
-                initialDate: DateTime.now(),
-                firstDate: DateTime(2000),
-                lastDate: DateTime(2100),
-                icon: Icon(Icons.event),
-                onChanged: (value) => {
-                  setState(() {
-                    date = value;
-                  })
-                },
-              ),
-              Text("Time"),
-              DateTimePicker(
-                type: DateTimePickerType.time,
-                initialDate: DateTime.now(),
-                firstDate: DateTime(2000),
-                lastDate: DateTime(2100),
-                icon: Icon(Icons.lock_clock),
-                onChanged: (value) => {
-                  setState(() {
-                    time = value;
-                  })
-                },
-              ),
-              Text("Alert"),
-              DateTimePicker(
-                type: DateTimePickerType.dateTime,
-                initialDate: DateTime.now(),
-                firstDate: DateTime(2000),
-                lastDate: DateTime(2100),
-                icon: Icon(Icons.lock_clock),
-                onChanged: (value) => {
-                  setState(() {
-                    alert = value;
-                  })
-                },
-              ),
-              ElevatedButton.icon(
-                onPressed: () {
-                  if (_eventContoller.text.length > 0) {
-                    BlocProvider.of<EventBloc>(context).add(AddEventEvent(
-                        event: Event(
-                            title: _eventContoller.text,
-                            dateCreated: new DateTime.now().toString(),
-                            deadlineDate: date,
-                            deadlineTime: time,
-                            alert: alert,
-                            status: false)));
+            ),
+            Text("Date"),
+            DateTimePicker(
+              type: DateTimePickerType.date,
+              initialDate: DateTime.now(),
+              firstDate: DateTime(2000),
+              lastDate: DateTime(2100),
+              icon: Icon(Icons.event),
+              onChanged: (value) => {
+                setState(() {
+                  date = value;
+                })
+              },
+            ),
+            Text("Time"),
+            DateTimePicker(
+              type: DateTimePickerType.time,
+              initialDate: DateTime.now(),
+              firstDate: DateTime(2000),
+              lastDate: DateTime(2100),
+              icon: Icon(Icons.lock_clock),
+              onChanged: (value) => {
+                setState(() {
+                  time = value;
+                })
+              },
+            ),
+            Text("Alert"),
+            DateTimePicker(
+              type: DateTimePickerType.dateTime,
+              initialDate: DateTime.now(),
+              firstDate: DateTime(2000),
+              lastDate: DateTime(2100),
+              icon: Icon(Icons.lock_clock),
+              onChanged: (value) => {
+                setState(() {
+                  alert = value;
+                })
+              },
+            ),
+            ElevatedButton.icon(
+              onPressed: () {
+                if (_eventContoller.text.length > 0) {
+                  BlocProvider.of<EventBloc>(context).add(AddEventEvent(
+                      event: Event(
+                          title: _eventContoller.text,
+                          dateCreated: new DateTime.now().toString(),
+                          deadlineDate: date,
+                          deadlineTime: time,
+                          alert: alert,
+                          status: false)));
 
-                  } else {
-                    //snack for empty warning
-                  }
-                },
-                icon: Icon(Icons.add),
-                label: Text("Add Event"),
-              )
-            ],
-          );
-        },
-      ),
+                          Navigator.of(context).pop();
+
+                } else {
+                  //snack for empty warning
+                }
+              },
+              icon: Icon(Icons.add),
+              label: Text("Add Event"),
+            )
+          ],
+        );
+      },
     );
   }
 }
