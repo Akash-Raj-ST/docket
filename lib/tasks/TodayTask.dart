@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../models/task.dart';
 import 'bloc/task_bloc.dart';
 
 class TodayTask extends StatelessWidget {
@@ -11,9 +12,13 @@ class TodayTask extends StatelessWidget {
     return BlocBuilder<TaskBloc, TaskState>(
       builder: (context, state) {
         if(state is TaskLoadedState){
+
+          var todayTaskList = state.Tasks.where((task) => task.dateCreated != DateTime.now().toString());
+          print(todayTaskList);
+          
           return ListView(
-            children: state.Tasks.map((task) {
-              return TaskItem(task: task);
+            children: todayTaskList.map((task) {
+                return TaskItem(task: task);
             }).toList(),
           );
         }
@@ -27,10 +32,17 @@ class TodayTask extends StatelessWidget {
   }
 }
 
-class TaskItem extends StatelessWidget {
+
+class TaskItem extends StatefulWidget {
   var task;
 
   TaskItem({required this.task, super.key});
+
+  @override
+  State<TaskItem> createState() => _TaskItemState();
+}
+
+class _TaskItemState extends State<TaskItem> {
 
   @override
   Widget build(BuildContext context) {
@@ -49,32 +61,33 @@ class TaskItem extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(14.0),
       child: Container(
+
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(8)),
           color: Colors.white,
         ),
+
         child: Padding(
           padding: const EdgeInsets.all(12.0),
           child: Row(
             children: [
               Checkbox(
-                  value: false,
+                  value: widget.task.status,
                   fillColor: MaterialStateProperty.resolveWith(getColor),
                   onChanged: (bool? value) {
-                    // setState(() {
-                    //   is_checked = value!;
+                    setState(() {
 
-                    //   if (is_checked) {
-                    //     //update status of list
-                    //   }
-                    // });
+                      var updated_task = Task(title: widget.task.title,dateCreated: widget.task.dateCreated,status:value!);
+
+                      BlocProvider.of<TaskBloc>(context)..add(UpdateTaskEvent(key: widget.task.key, task: updated_task));
+                    });
                   }),
               Flexible(
                 child: Padding(
                   padding: const EdgeInsets.only(left: 8, right: 8),
-                  child: Text(task.title,
+                  child: Text(widget.task.title,
                       style: TextStyle(
-                        decoration: task.status
+                        decoration: widget.task.status
                             ? TextDecoration.lineThrough
                             : TextDecoration.none,
                         fontSize: 14,

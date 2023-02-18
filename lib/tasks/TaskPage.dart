@@ -29,23 +29,18 @@ class _TaskState extends State<TaskPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
+    return BlocConsumer<TaskBloc, TaskState>(
 
-      create: (context) => TaskBloc(
-        RepositoryProvider.of<TaskService>(context)
-      )..add(TaskServiceEvent()),
+      listener: (context, state) {
 
-      child: BlocConsumer<TaskBloc, TaskState>(
-        listener: (context, state) {
-          // TODO: implement listener
-          if(state is TaskAdded){
-            print("Task Added snackbar");
-          }
-        },
+        if(state is TaskAdded){
+          print("Task Added snackbar");
+        }
+
+      },
 
       builder: (context, state) {
-        
-        if(state is TaskLoadedState){
+
           return Expanded(
             flex: 3,
             child: Column(
@@ -61,34 +56,12 @@ class _TaskState extends State<TaskPage> {
                         ? TodayTask()
                         : PendingTask()
                 ),
-
-                FloatingActionButton(
-                  onPressed: (){
-                    Navigator.of(context)
-                        .push(MaterialPageRoute(
-                          builder: (_) => BlocProvider.value(
-                            value: BlocProvider.of<TaskBloc>(context),
-                            child: AddPage()
-                            )
-                          )
-                    );
-
-                  },
-                  child: Icon(Icons.add),
-                )
+                
               ],
             ),
           );
-        }
-
-        else{
-
-          return Center(
-            child: Text("Loading.."),
-          );
-        }
-        },
-      ),
+      
+      },
     );
   }
 }
