@@ -16,6 +16,11 @@ class EventAdded extends EventState {
   List<Object> get props => [];
 }
 
+class EventDeleted extends EventState {
+  @override
+  List<Object> get props => [];
+}
+
 
 class EventLoadedState extends EventState {
   final List<Event> Events;

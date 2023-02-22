@@ -39,6 +39,8 @@ class EventBloc extends Bloc<EventEvent, EventState> {
 
     on<DeleteEventEvent>((event, emit) {
       _eventService.deleteEvent(event.key);
+      emit(EventDeleted());
+      add(LoadEventEvent());
     });
   }
 }

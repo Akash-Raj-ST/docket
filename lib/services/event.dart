@@ -23,10 +23,10 @@ class EventService {
   }
 
   Future<void> deleteEvent(int key) async{
-    _events.delete(key);
+    await _events.delete(key);
   }
 
   Future<void> updateEvent(int key,Event event) async{
-    _events.put(key,event);
+    await _events.put(key,event);
   }
 }
