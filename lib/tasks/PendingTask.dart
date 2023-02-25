@@ -1,9 +1,14 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../models/task.dart';
 import 'bloc/task_bloc.dart';
+
+import '../utils/utilFunctions.dart';
+
 
 class PendingTask extends StatelessWidget {
 
@@ -12,7 +17,7 @@ class PendingTask extends StatelessWidget {
     return BlocBuilder<TaskBloc, TaskState>(
       builder: (context, state) {
         if(state is TaskLoadedState){
-          var pendingTaskList = state.Tasks.where((task) => task.dateCreated != DateTime.now().toString() && !task.status);
+          var pendingTaskList = state.Tasks.where((task) => !dateEquals(task.dateCreated,DateTime.now()) && !task.status);
 
           return ListView(
             children: pendingTaskList.map((task) {
@@ -74,9 +79,11 @@ class _TaskItemState extends State<TaskItem> {
                   onChanged: (bool? value) {
                     setState(() {
 
-                      var updated_task = Task(title: widget.task.title,dateCreated: widget.task.dateCreated,status:value!);
+                      if(value!){
+                        BlocProvider.of<TaskBloc>(context)..add(DeleteTaskEvent(key: widget.task.key));
+                        //snack bar to show deleted
+                      }
 
-                      BlocProvider.of<TaskBloc>(context)..add(UpdateTaskEvent(key: widget.task.key, task: updated_task));
                     });
                   }),
               Flexible(
@@ -100,3 +107,4 @@ class _TaskItemState extends State<TaskItem> {
     );
   }
 }
+

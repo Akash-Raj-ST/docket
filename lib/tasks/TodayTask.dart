@@ -5,6 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../models/task.dart';
 import 'bloc/task_bloc.dart';
 
+import '../utils/utilFunctions.dart';
+
 class TodayTask extends StatelessWidget {
 
   @override
@@ -12,9 +14,8 @@ class TodayTask extends StatelessWidget {
     return BlocBuilder<TaskBloc, TaskState>(
       builder: (context, state) {
         if(state is TaskLoadedState){
-
-          var todayTaskList = state.Tasks.where((task) => task.dateCreated != DateTime.now().toString());
-          print(todayTaskList);
+          
+          var todayTaskList = state.Tasks.where((task) => dateEquals(task.dateCreated,DateTime.now()));
           
           return ListView(
             children: todayTaskList.map((task) {
@@ -102,3 +103,4 @@ class _TaskItemState extends State<TaskItem> {
     );
   }
 }
+

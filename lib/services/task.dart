@@ -1,3 +1,4 @@
+import 'package:docket/utils/utilFunctions.dart';
 import 'package:hive/hive.dart';
 import 'package:docket/models/task.dart';
 
@@ -9,33 +10,21 @@ class TaskService{
   Future<void> init() async{
     Hive.registerAdapter(TaskAdapter());
     _tasks = await Hive.openBox<Task>('TaskBox');
+
+    //clear done tasks;
+
+    final all_tasks = _tasks.values.toList();
+
+    for(int i=0;i<all_tasks.length;i++){
+
+      if(all_tasks[i].status && !dateEquals(all_tasks[i].dateCreated, DateTime.now())){
+        _tasks.delete(all_tasks[i].key);
+      }
+    }
   }
 
   Future<List<Task>> getTasks() async{
     final all_tasks = _tasks.values.toList();
-  //   return [
-  //   Task(
-  //     title: "review  2 ppt for ISM",
-  //     dateCreated: "12/01/2023",
-  //     status: false
-  //   ),
-  //   Task(
-  //     title: "review  3 ppt for ISM",
-  //     dateCreated: "12/01/2023",
-  //     status: true
-  //   ),
-  //   Task(
-  //     title: "review  4 ppt for ISM",
-  //     dateCreated: "12/01/2023",
-  //     status: false
-  //   ),
-  //   Task(
-  //     title: "review  5 ppt for ISM",
-  //     dateCreated: "12/01/2023",
-  //     status: false
-  //   ),
-  
-  // ];
     return all_tasks;
   }
 

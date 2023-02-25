@@ -38,6 +38,8 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
 
     on<DeleteTaskEvent>((event, emit) {
       _taskService.deleteTask(event.key);
+      emit(TaskDeleted());
+      add(LoadTaskEvent());
     });
   }
 }
