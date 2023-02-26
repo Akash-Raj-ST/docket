@@ -59,44 +59,59 @@ class _TaskItemState extends State<TaskItem> {
       return Colors.greenAccent;
     }
 
-    return Padding(
-      padding: const EdgeInsets.all(14.0),
-      child: Container(
+    return Dismissible(
 
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(8)),
-          color: Colors.white,
-        ),
+      key: Key(widget.task.key.toString()),
 
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Row(
-            children: [
-              Checkbox(
-                  value: widget.task.status,
-                  fillColor: MaterialStateProperty.resolveWith(getColor),
-                  onChanged: (bool? value) {
-                    setState(() {
+      onDismissed: ((direction) {
+        BlocProvider.of<TaskBloc>(context).add(DeleteTaskEvent(key: widget.task.key));
+        print("dismissed");
+      }),
 
-                      var updated_task = Task(title: widget.task.title,dateCreated: widget.task.dateCreated,status:value!);
+      background: Padding(
+        padding: const EdgeInsets.only(top:14.0,bottom:14.0),
+        child: Container(color: Colors.red[100],),
+      ),
 
-                      BlocProvider.of<TaskBloc>(context)..add(UpdateTaskEvent(key: widget.task.key, task: updated_task));
-                    });
-                  }),
-              Flexible(
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 8, right: 8),
-                  child: Text(widget.task.title,
-                      style: TextStyle(
-                        decoration: widget.task.status
-                            ? TextDecoration.lineThrough
-                            : TextDecoration.none,
-                        fontSize: 14,
-                        color: Colors.black,
-                      )),
+      child: Padding(
+        padding: const EdgeInsets.all(14.0),
+        child: Container(
+    
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(8)),
+            color: Colors.white,
+          ),
+    
+          child: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Row(
+              children: [
+                Checkbox(
+                    value: widget.task.status,
+                    fillColor: MaterialStateProperty.resolveWith(getColor),
+                    onChanged: (bool? value) {
+                      setState(() {
+    
+                        var updated_task = Task(title: widget.task.title,dateCreated: widget.task.dateCreated,status:value!);
+    
+                        BlocProvider.of<TaskBloc>(context)..add(UpdateTaskEvent(key: widget.task.key, task: updated_task));
+                      });
+                    }),
+                Flexible(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 8, right: 8),
+                    child: Text(widget.task.title,
+                        style: TextStyle(
+                          decoration: widget.task.status
+                              ? TextDecoration.lineThrough
+                              : TextDecoration.none,
+                          fontSize: 14,
+                          color: Colors.black,
+                        )),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

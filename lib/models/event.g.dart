@@ -22,7 +22,7 @@ class EventAdapter extends TypeAdapter<Event> {
       deadlineDate: fields[2] as String,
       deadlineTime: fields[3] as String,
       alert: fields[4] as String,
-      status: fields[5] as bool,
+      alertStatus: fields[5] as bool,
     );
   }
 
@@ -41,7 +41,7 @@ class EventAdapter extends TypeAdapter<Event> {
       ..writeByte(4)
       ..write(obj.alert)
       ..writeByte(5)
-      ..write(obj.status);
+      ..write(obj.alertStatus);
   }
 
   @override

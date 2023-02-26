@@ -111,17 +111,26 @@ class EventItem extends StatelessWidget {
                 ),
 
                 //title
-                Padding(
-                  padding: const EdgeInsets.only(
-                      left: 8, top: 2, right: 8, bottom: 2),
-                  child: Center(
-                    child: Text(
-                      event.title,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                GestureDetector(
+
+                  onTap: () {
+                    print("Event Tapped");
+                  },
+
+                  child: Container(
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                          left: 8, top: 2, right: 8, bottom: 2),
+                      child: Center(
+                        child: Text(
+                          event.title,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
                       ),
                     ),
                   ),

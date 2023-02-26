@@ -21,7 +21,7 @@ class Event extends HiveObject{
   final String alert;
 
   @HiveField(5)
-  final bool status;
+  final bool alertStatus;
 
   Event({
     required this.title,
@@ -29,7 +29,7 @@ class Event extends HiveObject{
     required this.deadlineDate,
     required this.deadlineTime,
     required this.alert,
-    required this.status,
+    required this.alertStatus,
   });
 
 
