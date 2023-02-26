@@ -1,3 +1,4 @@
+import 'package:docket/events/UpdateEventPage.dart';
 import 'package:docket/events/bloc/event_bloc.dart';
 import 'package:docket/services/event.dart';
 import 'package:docket/services/task.dart';
@@ -114,6 +115,13 @@ class EventItem extends StatelessWidget {
                 GestureDetector(
 
                   onTap: () {
+                    showModalBottomSheet<void>(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return UpdateEventPage(event: event);
+                      }
+                    );
+
                     print("Event Tapped");
                   },
 
