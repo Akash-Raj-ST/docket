@@ -1,9 +1,11 @@
 import 'package:date_time_picker/date_time_picker.dart';
+import 'package:docket/components/AddButton.dart';
 import 'package:docket/services/event.dart';
 import 'package:docket/services/task.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../components/CustomTextField.dart';
 import '../events/bloc/event_bloc.dart';
 import '../models/event.dart';
 import '../models/task.dart';
@@ -45,15 +47,18 @@ class _AddPageState extends State<AddPage> {
 }
 
 Widget ShowOptions(current_tab, handler) {
-  return Row(
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: [
-      button("Task", current_tab, handler),
-      SizedBox(
-        width: 10,
-      ),
-      button("Event", current_tab, handler),
-    ],
+  return Padding(
+    padding: const EdgeInsets.all(20.0),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        button("Task", current_tab, handler),
+        SizedBox(
+          width: 15,
+        ),
+        button("Event", current_tab, handler),
+      ],
+    ),
   );
 }
 
@@ -84,33 +89,36 @@ class _TaskAddPageState extends State<TaskAddPage> {
         }
       },
       builder: (context, state) {
-        return Column(
-          children: [
-            TextField(
-              controller: _taskContoller,
-              decoration: InputDecoration(
-                labelText: "Task",
+        return Expanded(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                child: CustomTextField(
+                  controller: _taskContoller,
+                  label:"Task",
+                ),
               ),
-            ),
-            ElevatedButton.icon(
-              onPressed: () {
-                if (_taskContoller.text.length > 0) {
-                  BlocProvider.of<TaskBloc>(context).add(AddTaskEvent(
-                      task: Task(
-                          title: _taskContoller.text,
-                          dateCreated: new DateTime.now().toString(),
-                          status: false)));
-
-                  Navigator.of(context).pop();
-                  
-                } else {
-                  //snack for empty warning
-                }
-              },
-              icon: Icon(Icons.add),
-              label: Text("Add Task"),
-            )
-          ],
+        
+              CustomAddButton(
+                onPressed: () {
+                  if (_taskContoller.text.length > 0) {
+                    BlocProvider.of<TaskBloc>(context).add(AddTaskEvent(
+                        task: Task(
+                            title: _taskContoller.text,
+                            dateCreated: new DateTime.now().toString(),
+                            status: false)));
+          
+                    Navigator.of(context).pop();
+                    
+                  } else {
+                    //snack for empty warning
+                  }
+                },
+                label: "Add Task", 
+              )
+            ],
+          ),
         );
       },
     );
@@ -131,6 +139,7 @@ class _EventAddPageState extends State<EventAddPage> {
   String date = "";
   String time = "";
   String alert = "";
+  bool alertStatus = false;
 
   @override
   Widget build(BuildContext context) {
@@ -142,77 +151,149 @@ class _EventAddPageState extends State<EventAddPage> {
         }
       },
       builder: (context, state) {
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text("Event"),
-            TextField(
-              controller: _eventContoller,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
+        return Expanded(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                children: [
+                  CustomTextField(
+                    controller: _eventContoller,
+                    label: "Event"
+                  ),
+
+                  Padding(
+                    padding: const EdgeInsets.only(left:20,top:8,right:20,bottom:8),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Container(
+                            child: DateTimePicker(
+                              type: DateTimePickerType.date,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime(2000),
+                              lastDate: DateTime(2100),
+                              icon: Icon(Icons.event),
+                              onChanged: (value) => {
+                                setState(() {
+                                  date = value;
+                                })
+                              },
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(),
+                                label: Text("Date"),
+                              ),          
+                            ),
+                          ),
+                        ),
+
+                        SizedBox(
+                          width: 20,
+                        ),
+
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(left:20,top:8,right:20,bottom:8),
+                            child: Container(
+                              child: DateTimePicker(
+                                type: DateTimePickerType.time,
+                                initialDate: DateTime.now(),
+                                firstDate: DateTime(2000),
+                                lastDate: DateTime(2100),
+                                icon: Icon(Icons.lock_clock),
+                                onChanged: (value) => {
+                                  setState(() {
+                                    time = value;
+                                  })
+                                },
+                                decoration: InputDecoration(
+                                    border: OutlineInputBorder(),
+                                    label: Text("Time"),
+                                  ),  
+                              ),
+                                          
+                              
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  Row(
+
+                    children: [
+                      Expanded(
+                        child: Container(
+                          child: Padding(
+                            padding: const EdgeInsets.only(left:20,top:8,right:20,bottom:8),
+                            child: DateTimePicker(
+                              type: DateTimePickerType.dateTime,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime(2000),
+                              lastDate: DateTime(2100),
+                              icon: Icon(Icons.lock_clock),
+                              onChanged: (value) => {
+                                setState(() {
+                                  alert = value;
+                                })
+                              },
+                      
+                              decoration: InputDecoration(
+                                            border: OutlineInputBorder(),
+                                            label: Text("Alert"),
+                              ), 
+                            ),
+                          ),
+                        ),
+                      ),
+
+
+                      Expanded(
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left:20,top:8,right:20,bottom:8),
+                            child: Transform.scale(
+                              scale: 1.5,
+                              child: Switch(
+                                value: alertStatus, 
+                                onChanged: (value){
+                                  setState(() {
+                                    alertStatus = value;
+                                  });
+                                }
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ],
               ),
-            ),
-            Text("Date"),
-            DateTimePicker(
-              type: DateTimePickerType.date,
-              initialDate: DateTime.now(),
-              firstDate: DateTime(2000),
-              lastDate: DateTime(2100),
-              icon: Icon(Icons.event),
-              onChanged: (value) => {
-                setState(() {
-                  date = value;
-                })
-              },
-            ),
-            Text("Time"),
-            DateTimePicker(
-              type: DateTimePickerType.time,
-              initialDate: DateTime.now(),
-              firstDate: DateTime(2000),
-              lastDate: DateTime(2100),
-              icon: Icon(Icons.lock_clock),
-              onChanged: (value) => {
-                setState(() {
-                  time = value;
-                })
-              },
-            ),
-            Text("Alert"),
-            DateTimePicker(
-              type: DateTimePickerType.dateTime,
-              initialDate: DateTime.now(),
-              firstDate: DateTime(2000),
-              lastDate: DateTime(2100),
-              icon: Icon(Icons.lock_clock),
-              onChanged: (value) => {
-                setState(() {
-                  alert = value;
-                })
-              },
-            ),
-            ElevatedButton.icon(
-              onPressed: () {
-                if (_eventContoller.text.length > 0) {
-                  BlocProvider.of<EventBloc>(context).add(AddEventEvent(
-                      event: Event(
-                          title: _eventContoller.text,
-                          dateCreated: new DateTime.now().toString(),
-                          deadlineDate: date,
-                          deadlineTime: time,
-                          alert: alert,
-                          status: false)));
-
-                          Navigator.of(context).pop();
-
-                } else {
-                  //snack for empty warning
-                }
-              },
-              icon: Icon(Icons.add),
-              label: Text("Add Event"),
-            )
-          ],
+              CustomAddButton(
+                onPressed: () {
+                  if (_eventContoller.text.length > 0) {
+                    BlocProvider.of<EventBloc>(context).add(AddEventEvent(
+                        event: Event(
+                            title: _eventContoller.text,
+                            dateCreated: new DateTime.now().toString(),
+                            deadlineDate: date,
+                            deadlineTime: time,
+                            alert: alert,
+                            alertStatus: false)));
+        
+                            Navigator.of(context).pop();
+        
+                  } else {
+                    //snack for empty warning
+                  }
+                },
+                label: "Add Event",
+              )
+            ],
+          ),
         );
       },
     );
