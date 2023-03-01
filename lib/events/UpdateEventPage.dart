@@ -45,154 +45,160 @@ class _UpdateEventPageState extends State<UpdateEventPage> {
         }
       },
       builder: (context, state) {
-        return Expanded(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Column(
+        return Padding(
+          padding: const EdgeInsets.all(14.0),
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  CustomTextField(
-                    controller: _eventContoller,
-                    label: "Event"
-                  ),
-
-                  Padding(
-                    padding: const EdgeInsets.only(left:20,top:8,right:20,bottom:8),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Container(
-                            child: DateTimePicker(
-                              type: DateTimePickerType.date,
-                              initialDate: DateTime.parse(date),
-                              initialValue: date,
-                              firstDate: DateTime(2000),
-                              lastDate: DateTime(2100),
-                              icon: Icon(Icons.event),
-                              onChanged: (value) => {
-                                setState(() {
-                                  date = value;
-                                })
-                              },
-                              decoration: InputDecoration(
-                                border: OutlineInputBorder(),
-                                label: Text("Date"),
-                              ),          
-                            ),
-                          ),
-                        ),
-
-                        SizedBox(
-                          width: 20,
-                        ),
-
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.only(left:20,top:8,right:20,bottom:8),
-                            child: Container(
-                              child: DateTimePicker(
-                                type: DateTimePickerType.time,
-                                initialValue: time,
-                                firstDate: DateTime(2000),
-                                lastDate: DateTime(2100),
-                                icon: Icon(Icons.lock_clock),
-                                onChanged: (value) => {
-                                  setState(() {
-                                    time = value;
-                                  })
-                                },
-                                decoration: InputDecoration(
-                                    border: OutlineInputBorder(),
-                                    label: Text("Time"),
-                                  ),  
-                              ),
-                                          
-                              
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  Row(
-
+                  Column(
                     children: [
-                      Expanded(
-                        child: Container(
-                          child: Padding(
-                            padding: const EdgeInsets.only(left:20,top:8,right:20,bottom:8),
-                            child: DateTimePicker(
-                              type: DateTimePickerType.dateTime,
-                              initialDate: DateTime.parse(alert),
-                              initialValue: alert,
-                              firstDate: DateTime(2000),
-                              lastDate: DateTime(2100),
-                              icon: Icon(Icons.lock_clock),
-                              onChanged: (value) => {
-                                setState(() {
-                                  alert = value;
-                                })
-                              },
-                      
-                              decoration: InputDecoration(
-                                            border: OutlineInputBorder(),
-                                            label: Text("Alert"),
-                              ), 
+                      CustomTextField(
+                        controller: _eventContoller,
+                        label: "Event"
+                      ),
+          
+                      Padding(
+                        padding: const EdgeInsets.only(left:20,top:8,right:20,bottom:8),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Container(
+                                child: DateTimePicker(
+                                  type: DateTimePickerType.date,
+                                  initialDate: DateTime.parse(date),
+                                  initialValue: date,
+                                  firstDate: DateTime(2000),
+                                  lastDate: DateTime(2100),
+                                  icon: Icon(Icons.event),
+                                  onChanged: (value) => {
+                                    setState(() {
+                                      date = value;
+                                    })
+                                  },
+                                  decoration: InputDecoration(
+                                    border: OutlineInputBorder(),
+                                    label: Text("Date"),
+                                  ),          
+                                ),
+                              ),
                             ),
-                          ),
+          
+                            SizedBox(
+                              width: 20,
+                            ),
+          
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.only(left:20,top:8,right:20,bottom:8),
+                                child: Container(
+                                  child: DateTimePicker(
+                                    type: DateTimePickerType.time,
+                                    initialValue: time,
+                                    firstDate: DateTime(2000),
+                                    lastDate: DateTime(2100),
+                                    icon: Icon(Icons.lock_clock),
+                                    onChanged: (value) => {
+                                      setState(() {
+                                        time = value;
+                                      })
+                                    },
+                                    decoration: InputDecoration(
+                                        border: OutlineInputBorder(),
+                                        label: Text("Time"),
+                                      ),  
+                                  ),
+                                              
+                                  
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-
-
-                      Expanded(
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: Padding(
-                            padding: const EdgeInsets.only(left:20,top:8,right:20,bottom:8),
-                            child: Transform.scale(
-                              scale: 1.5,
-                              child: Switch(
-                                value: alertStatus, 
-                                onChanged: (value){
-                                  setState(() {
-                                    alertStatus = value;
-                                  });
-                                }
+          
+                      Row(
+          
+                        children: [
+                          Expanded(
+                            child: Container(
+                              child: Padding(
+                                padding: const EdgeInsets.only(left:20,top:8,right:20,bottom:8),
+                                child: DateTimePicker(
+                                  type: DateTimePickerType.dateTime,
+                                  initialDate: DateTime.parse(alert),
+                                  initialValue: alert,
+                                  firstDate: DateTime(2000),
+                                  lastDate: DateTime(2100),
+                                  icon: Icon(Icons.lock_clock),
+                                  onChanged: (value) => {
+                                    setState(() {
+                                      alert = value;
+                                    })
+                                  },
+                          
+                                  decoration: InputDecoration(
+                                                border: OutlineInputBorder(),
+                                                label: Text("Alert"),
+                                  ), 
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      )
+          
+          
+                          Expanded(
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Padding(
+                                padding: const EdgeInsets.only(left:20,top:8,right:20,bottom:8),
+                                child: Transform.scale(
+                                  scale: 1.5,
+                                  child: Switch(
+                                    value: alertStatus, 
+                                    onChanged: (value){
+                                      setState(() {
+                                        alertStatus = value;
+                                      });
+                                    }
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
                     ],
                   ),
+                  CustomAddButton(
+                    onPressed: () {
+                      if (_eventContoller.text.length > 0) {
+                        BlocProvider.of<EventBloc>(context).add(UpdateEventEvent(
+                              key: widget.event.key,
+                              event: Event(
+                                title: _eventContoller.text,
+                                dateCreated: new DateTime.now().toString(),
+                                deadlineDate: date,
+                                deadlineTime: time,
+                                alert: alert,
+                                alertStatus: alertStatus
+                              )
+                          )
+                        );
+              
+                            Navigator.of(context).pop();
+              
+                      } else {
+                        //snack for empty warning
+                      }
+                    },
+                    label: "Update Event",
+                  )
                 ],
               ),
-              CustomAddButton(
-                onPressed: () {
-                  if (_eventContoller.text.length > 0) {
-                    BlocProvider.of<EventBloc>(context).add(UpdateEventEvent(
-                          key: widget.event.key,
-                          event: Event(
-                            title: _eventContoller.text,
-                            dateCreated: new DateTime.now().toString(),
-                            deadlineDate: date,
-                            deadlineTime: time,
-                            alert: alert,
-                            alertStatus: alertStatus
-                          )
-                      )
-                    );
-        
-                        Navigator.of(context).pop();
-        
-                  } else {
-                    //snack for empty warning
-                  }
-                },
-                label: "Update Event",
-              )
-            ],
+            ),
           ),
         );
       },
