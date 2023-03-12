@@ -67,12 +67,12 @@ class _TaskItemState extends State<TaskItem> {
       }),
       
       background: Padding(
-        padding: const EdgeInsets.only(top:14.0,bottom:14.0),
+        padding: const EdgeInsets.only(top:4.0,bottom:4.0),
         child: Container(color: Colors.red[100],),
       ),
 
       child: Padding(
-        padding: const EdgeInsets.all(14.0),
+        padding: const EdgeInsets.all(4.0),
         child: Container(
     
           decoration: BoxDecoration(
@@ -81,7 +81,7 @@ class _TaskItemState extends State<TaskItem> {
           ),
     
           child: Padding(
-            padding: const EdgeInsets.all(12.0),
+            padding: const EdgeInsets.all(1.0),
             child: Row(
               
               children: [
@@ -107,7 +107,7 @@ class _TaskItemState extends State<TaskItem> {
                               ? TextDecoration.lineThrough
                               : TextDecoration.none,
                         
-                          fontSize: 14,
+                          fontSize: 17,
                           color: Color.fromARGB(255, 163, 44, 44),
                         )),
                   ),

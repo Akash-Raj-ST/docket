@@ -42,7 +42,7 @@ class _EventState extends State<EventPage> {
                       scrollbarOrientation: ScrollbarOrientation.bottom,
                       thumbVisibility: true,
                       child: Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.only(top: 8,bottom: 8),
                         child: ListView(
                           scrollDirection: Axis.horizontal,
                           children: state.Events.map((event) {
