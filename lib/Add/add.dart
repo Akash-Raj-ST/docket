@@ -1,6 +1,7 @@
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:docket/components/AddButton.dart';
 import 'package:docket/services/event.dart';
+import 'package:docket/services/notification.dart';
 import 'package:docket/services/task.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -134,12 +135,20 @@ class EventAddPage extends StatefulWidget {
 
 class _EventAddPageState extends State<EventAddPage> {
   final _eventContoller = TextEditingController();
+  final NotificationService notificationService = NotificationService();
 
   String event_name = "";
   String date = "";
   String time = "";
   String alert = "";
   bool alertStatus = false;
+
+
+  @override
+  void initState(){
+    super.initState();
+    notificationService.init();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -275,6 +284,8 @@ class _EventAddPageState extends State<EventAddPage> {
               CustomAddButton(
                 onPressed: () {
                   if (_eventContoller.text.length > 0) {
+                    notificationService.showNotification(1, _eventContoller.text, 'body');
+
                     BlocProvider.of<EventBloc>(context).add(AddEventEvent(
                         event: Event(
                             title: _eventContoller.text,
@@ -282,9 +293,10 @@ class _EventAddPageState extends State<EventAddPage> {
                             deadlineDate: date,
                             deadlineTime: time,
                             alert: alert,
-                            alertStatus: alertStatus)));
-        
-                            Navigator.of(context).pop();
+                            alertStatus: alertStatus))
+                    );
+                    print("final...");
+                    Navigator.of(context).pop();
         
                   } else {
                     //snack for empty warning
