@@ -1,3 +1,4 @@
+import 'package:docket/services/notification.dart';
 import 'package:docket/tasks/bloc/task_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,6 +15,7 @@ import 'events/bloc/event_bloc.dart';
 
 Future<void> main() async {
   await Hive.initFlutter();
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(MainApp());
 }
 
