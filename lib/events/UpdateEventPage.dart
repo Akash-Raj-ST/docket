@@ -1,4 +1,5 @@
 import 'package:date_time_picker/date_time_picker.dart';
+import 'package:docket/components/showSnack.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -51,7 +52,7 @@ class _UpdateEventPageState extends State<UpdateEventPage> {
             child: Padding(
               padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Column(
                     children: [
@@ -123,6 +124,7 @@ class _UpdateEventPageState extends State<UpdateEventPage> {
           
                         children: [
                           Expanded(
+                            flex: 2,
                             child: Container(
                               child: Padding(
                                 padding: const EdgeInsets.only(left:20,top:8,right:20,bottom:8),
@@ -191,7 +193,19 @@ class _UpdateEventPageState extends State<UpdateEventPage> {
                             Navigator.of(context).pop();
               
                       } else {
-                        //snack for empty warning
+                        print("Update Error");
+                          if(_eventContoller.text.length==0){
+                            showSnackBar(context, "Event title cannot be empty!!!");
+                          }
+                          else if(date.length==0 && time.length==0){
+                            showSnackBar(context, "Missing Date and Time");
+                          }
+                          if(date.length==0){
+                            showSnackBar(context, "Missing Date");
+                          }
+                          else if(time.length==0){
+                            showSnackBar(context, "Missing Time");
+                          }
                       }
                     },
                     label: "Update Event",

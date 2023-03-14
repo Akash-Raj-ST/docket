@@ -23,26 +23,28 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(
-              providers: [
-                RepositoryProvider(create: (context) => EventService()),
-                RepositoryProvider(create: (context) => TaskService()),
-              ],
-
-              child: MultiBlocProvider(
-                providers: [
-                  BlocProvider<TaskBloc>(
-                    create: (BuildContext context) => TaskBloc(RepositoryProvider.of<TaskService>(context))..add(TaskServiceEvent()),
-                  ),
-                  BlocProvider<EventBloc>(
-                    create: (BuildContext context) => EventBloc(RepositoryProvider.of<EventService>(context))..add(EventServiceEvent()),
-                  ),
-                ],
-
-                child: MaterialApp(
-                  home: MyApp(),
-                ),
-              )
-          );
+        providers: [
+          RepositoryProvider(create: (context) => EventService()),
+          RepositoryProvider(create: (context) => TaskService()),
+        ],
+        child: MultiBlocProvider(
+          providers: [
+            BlocProvider<TaskBloc>(
+              create: (BuildContext context) =>
+                  TaskBloc(RepositoryProvider.of<TaskService>(context))
+                    ..add(TaskServiceEvent()),
+            ),
+            BlocProvider<EventBloc>(
+              create: (BuildContext context) =>
+                  EventBloc(RepositoryProvider.of<EventService>(context))
+                    ..add(EventServiceEvent()),
+            ),
+          ],
+          child: MaterialApp(
+            //theme: ThemeData(fontFamily: 'RobotoMono'),
+            home: MyApp(),
+          ),
+        ));
   }
 }
 
@@ -53,31 +55,32 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(title: Text("Docket!")),
-        body: Column(
-          children: [
-            EventPage(),
-            TaskPage(),
-          ],
+        body: BlocBuilder<EventBloc, EventState>(
+          builder: (context, state) {
+
+            if(state is EventLoadedState){
+              return Column(
+                children: [
+                  state.Events.length==0? Text("") :EventPage(),
+                  TaskPage(),
+                ],
+              );
+            }else{
+              return Text("Loading...");
+            }
+          },
         ),
-
         floatingActionButton: FloatingActionButton(
-                  onPressed: (){
-                    Navigator.of(context)
-                        .push(MaterialPageRoute(
-                          builder: (_) => MultiBlocProvider(
-                            providers:[
-                              BlocProvider.value(value: BlocProvider.of<TaskBloc>(context)),
-                              BlocProvider.value(value: BlocProvider.of<EventBloc>(context)),
-                            ],
-                            child: AddPage()
-                            )
-                          )
-                    );
-
-                  },
-                  child: Icon(Icons.add),
-                )
-      );
+          onPressed: () {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (_) => MultiBlocProvider(providers: [
+                      BlocProvider.value(
+                          value: BlocProvider.of<TaskBloc>(context)),
+                      BlocProvider.value(
+                          value: BlocProvider.of<EventBloc>(context)),
+                    ], child: AddPage())));
+          },
+          child: Icon(Icons.add),
+        ));
   }
 }
-

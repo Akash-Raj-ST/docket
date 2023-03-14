@@ -8,6 +8,8 @@ import '../Add/add.dart';
 import './PendingTask.dart';
 import './TodayTask.dart';
 import 'bloc/task_bloc.dart';
+import '../components/showSnack.dart';
+
 
 class TaskPage extends StatefulWidget {
   const TaskPage({super.key});
@@ -34,7 +36,11 @@ class _TaskState extends State<TaskPage> {
       listener: (context, state) {
 
         if(state is TaskAdded){
-          print("Task Added snackbar");
+          showSnackBar(context, "Task Added");
+        }
+
+        if(state is TaskDeleted){
+          showSnackBar(context, "Task Deleted");
         }
 
       },

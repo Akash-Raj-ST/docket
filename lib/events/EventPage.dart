@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:docket/events/UpdateEventPage.dart';
 import 'package:docket/events/bloc/event_bloc.dart';
 import 'package:docket/services/event.dart';
@@ -6,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:docket/utils/heading.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../components/showSnack.dart';
 
 class EventPage extends StatefulWidget {
   const EventPage({super.key});
@@ -19,12 +23,16 @@ class _EventState extends State<EventPage> {
   Widget build(BuildContext context) {
     return BlocConsumer<EventBloc, EventState>(
       listener: (context, state) {
-        if(state is EventDeleted){
-          print("event deleted");
+        if(state is EventAdded){
+          showSnackBar(context, "Event Added");
         }
 
-        if(state is EventAdded){
-          print("event added");
+        if(state is EventDeleted){
+          showSnackBar(context, "Event Deleted");
+        }
+
+        if(state is EventUpdated){
+          showSnackBar(context, "Event Updated");
         }
       },
       builder: (context, state) {
@@ -69,6 +77,17 @@ class EventItem extends StatelessWidget {
   var days_left = "";
 
   EventItem({required this.event, super.key});
+
+  double getFontSize(int len){
+    double size;
+
+    if(len<=25) size = 22;
+    else if(len<=50) size = 20;
+    else if(len<=75) size = 18;
+    else size = 16;
+
+    return size;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -118,7 +137,8 @@ class EventItem extends StatelessWidget {
                     showModalBottomSheet<void>(
                       context: context,
                       builder: (BuildContext context) {
-                        return UpdateEventPage(event: event);
+                        return Scaffold(
+                          body: UpdateEventPage(event: event));
                       }
                     );
 
@@ -134,7 +154,7 @@ class EventItem extends StatelessWidget {
                           event.title,
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            fontSize: 20,
+                            fontSize: getFontSize(event.title.length),
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
                           ),
@@ -174,12 +194,15 @@ class EventItem extends StatelessWidget {
 }
 
 Text days_remaining(days_left) {
-  var tx;
+  var tx,ty;
+
+  if(days_left==1 || days_left==-1) ty="day";
+  else ty="days";
 
   if (days_left < 0) {
-    tx = "${-1 * days_left} days past";
+    tx = "${-1 * days_left} ${ty} past";
   } else {
-    tx = "${days_left} days left";
+    tx = "${days_left} ${ty} left";
   }
 
   return Text(

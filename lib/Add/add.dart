@@ -1,5 +1,6 @@
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:docket/components/AddButton.dart';
+import 'package:docket/components/showSnack.dart';
 import 'package:docket/services/event.dart';
 import 'package:docket/services/task.dart';
 import 'package:flutter/material.dart';
@@ -80,13 +81,6 @@ class _TaskAddPageState extends State<TaskAddPage> {
     return BlocConsumer<TaskBloc, TaskState>(
       listener: (context, state) {
         // TODO: implement listener
-        if (state is TaskInitial) {
-          print("child bloc provider TaskInitial");
-        }
-
-        if (state is TaskLoadedState) {
-          print("child bloc provider TaskLoaded");
-        }
       },
       builder: (context, state) {
         return Expanded(
@@ -112,7 +106,7 @@ class _TaskAddPageState extends State<TaskAddPage> {
                     Navigator.of(context).pop();
                     
                   } else {
-                    //snack for empty warning
+                    showSnackBar(context, "Task Title cannot be empty!!!");
                   }
                 },
                 label: "Add Task", 
@@ -147,7 +141,9 @@ class _EventAddPageState extends State<EventAddPage> {
       listener: (context, state) {
         // TODO: implement listener
         if(state is EventAdded){
-          print("event added successfully");
+          const SnackBar(
+            content: Text('Event Added'),
+          );
         }
       },
       builder: (context, state) {
@@ -224,6 +220,7 @@ class _EventAddPageState extends State<EventAddPage> {
 
                     children: [
                       Expanded(
+                        flex: 2,
                         child: Container(
                           child: Padding(
                             padding: const EdgeInsets.only(left:20,top:8,right:20,bottom:8),
@@ -274,7 +271,7 @@ class _EventAddPageState extends State<EventAddPage> {
               ),
               CustomAddButton(
                 onPressed: () {
-                  if (_eventContoller.text.length > 0) {
+                  if (_eventContoller.text.length > 0 && date.length>0 && time.length>0) {
                     BlocProvider.of<EventBloc>(context).add(AddEventEvent(
                         event: Event(
                             title: _eventContoller.text,
@@ -287,7 +284,19 @@ class _EventAddPageState extends State<EventAddPage> {
                             Navigator.of(context).pop();
         
                   } else {
-                    //snack for empty warning
+                    
+                    if(_eventContoller.text.length==0){
+                      showSnackBar(context, "Event title cannot be empty!!!");
+                    }
+                    else if(date.length==0 && time.length==0){
+                      showSnackBar(context, "Missing Date and Time");
+                    }
+                    else if(date.length==0){
+                      showSnackBar(context, "Missing Date");
+                    }
+                    else if(time.length==0){
+                      showSnackBar(context, "Missing Time");
+                    }
                   }
                 },
                 label: "Add Event",
