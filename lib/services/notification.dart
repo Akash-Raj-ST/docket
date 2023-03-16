@@ -1,11 +1,14 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:timezone/timezone.dart' as tz;
+import 'package:timezone/data/latest.dart' as tz;
 
 class NotificationService {
 
-  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
   
   void init() async {
-    
+    flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
     AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings('mipmap/ic_launcher');
 
     final InitializationSettings initializationSettings =
@@ -14,14 +17,13 @@ class NotificationService {
                                   );
   
     await flutterLocalNotificationsPlugin.initialize(initializationSettings);
-    print("initialized");
 
+    tz.initializeTimeZones();
     
   }
 
-
-  Future showNotification(int id,String title,String body) async{
-
+  Future<void> showNotification(int id, String title, String body,DateTime scheduleTime) async {
+    
     AndroidNotificationDetails androidNotificationDetails = const AndroidNotificationDetails(
                                               'ChannelId_6', 
                                               'channelName',
@@ -34,6 +36,18 @@ class NotificationService {
     var notificationDetails = NotificationDetails(
                               android: androidNotificationDetails,
                             );
-    await flutterLocalNotificationsPlugin.show(id, title, body, notificationDetails);
+
+    await flutterLocalNotificationsPlugin.zonedSchedule(
+      2,
+      title,
+      body,
+      tz.TZDateTime.from(scheduleTime, tz.local), 
+      //schedule the notification to show after 2 seconds.
+      notificationDetails,
+      // Type of time interpretation
+      uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
+      androidAllowWhileIdle: true, // To show notification even when the app is closed
+    );
+
   }
 }

@@ -281,7 +281,9 @@ class _EventAddPageState extends State<EventAddPage> {
               CustomAddButton(
                 onPressed: () {
                   if (_eventContoller.text.length > 0 && date.length>0 && time.length>0) {
-                    notificationService.showNotification(1, _eventContoller.text, 'body');
+
+                    notificationService.showNotification(1, _eventContoller.text, 'body',DateTime.parse(alert));
+
                     BlocProvider.of<EventBloc>(context).add(AddEventEvent(
                         event: Event(
                             title: _eventContoller.text,
