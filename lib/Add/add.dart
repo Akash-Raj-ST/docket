@@ -129,20 +129,12 @@ class EventAddPage extends StatefulWidget {
 
 class _EventAddPageState extends State<EventAddPage> {
   final _eventContoller = TextEditingController();
-  final NotificationService notificationService = NotificationService();
 
   String event_name = "";
   String date = "";
   String time = "";
   String alert = "";
   bool alertStatus = false;
-
-
-  @override
-  void initState(){
-    super.initState();
-    notificationService.init();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -281,8 +273,6 @@ class _EventAddPageState extends State<EventAddPage> {
               CustomAddButton(
                 onPressed: () {
                   if (_eventContoller.text.length > 0 && date.length>0 && time.length>0) {
-
-                    notificationService.showNotification(1, _eventContoller.text, 'body',DateTime.parse(alert));
 
                     BlocProvider.of<EventBloc>(context).add(AddEventEvent(
                         event: Event(

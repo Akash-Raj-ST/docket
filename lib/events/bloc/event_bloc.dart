@@ -1,5 +1,6 @@
 
 import 'package:bloc/bloc.dart';
+import 'package:docket/services/notification.dart';
 import 'package:equatable/equatable.dart';
 
 import 'package:docket/services/event.dart';
@@ -12,11 +13,13 @@ part 'event_state.dart';
 class EventBloc extends Bloc<EventEvent, EventState> {
   
   final EventService _eventService;
+  final NotificationService _notificationService;
   
-  EventBloc(this._eventService) : super(EventInitial()) {
+  EventBloc(this._eventService,this._notificationService) : super(EventInitial()) {
 
     on<EventServiceEvent>((event,emit) async{
       await _eventService.init();
+      _notificationService.init();
 
       add(LoadEventEvent());
     });
@@ -29,12 +32,27 @@ class EventBloc extends Bloc<EventEvent, EventState> {
 
     on<AddEventEvent>((event, emit) {
       _eventService.addEvent(event.event);
+
+      if(event.event.alertStatus){
+        _notificationService.showNotification(
+          event.event.key, 
+          event.event.deadlineDate, 
+          event.event.title,
+          DateTime.parse(event.event.alert)
+        );
+      }
+
       emit(EventAdded());
       add(LoadEventEvent());
     });
 
     on<UpdateEventEvent>((event, emit) {
       _eventService.updateEvent(event.key, event.event);
+
+      if(!event.event.alertStatus){
+        _notificationService.deleteNotification(event.key);
+      }
+
       emit(EventUpdated());
       add(LoadEventEvent());
     });
