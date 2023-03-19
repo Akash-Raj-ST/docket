@@ -28,6 +28,7 @@ class MainApp extends StatelessWidget {
         providers: [
           RepositoryProvider(create: (context) => EventService()),
           RepositoryProvider(create: (context) => TaskService()),
+          RepositoryProvider(create: (context) => NotificationService()),
         ],
         child: MultiBlocProvider(
           providers: [
@@ -38,7 +39,10 @@ class MainApp extends StatelessWidget {
             ),
             BlocProvider<EventBloc>(
               create: (BuildContext context) =>
-                  EventBloc(RepositoryProvider.of<EventService>(context))
+                  EventBloc(
+                    RepositoryProvider.of<EventService>(context),
+                    RepositoryProvider.of<NotificationService>(context)
+                  )
                     ..add(EventServiceEvent()),
             ),
           ],
